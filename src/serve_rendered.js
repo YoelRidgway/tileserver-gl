@@ -493,6 +493,7 @@ async function respondImage(
     // END HACK(Part 1)
 
     if (z > 0 && tileMargin > 0) {
+      params.halftile = params.height / 2;
       params.width += tileMargin * 2;
       params.height += tileMargin * 2;
     }
@@ -515,9 +516,12 @@ async function respondImage(
 
       if (z > 0 && tileMargin > 0) {
         const y = mercator.px(params.center, z)[1];
+        // const halftile = mode === 'tile' ? 128 : params.halftile;
+        const viewportHeight = mode === 'tile' ? 256 : height;
+        // const viewportHeight = 256;
         const yoffset = Math.max(
-          Math.min(0, y - 128 - tileMargin),
-          y + 128 + tileMargin - Math.pow(2, z + 8),
+          Math.min(0, y - viewportHeight/2 - tileMargin),
+          y + viewportHeight/2 + tileMargin - Math.pow(2, z + 8)
         );
         image.extract({
           left: tileMargin * scale,
